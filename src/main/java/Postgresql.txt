@@ -1,0 +1,19 @@
+CREATE TABLE "person"(
+	id INT NOT NULL UNIQUE,
+	name VARCHAR(10) NOT NULL,
+	surname VARCHAR(15) NOT NULL,
+	age INT NOT NULL,
+	passport_number VARCHAR(9) NOT NULL UNIQUE
+);
+
+INSERT INTO "person" VALUES
+    (1,'Ivan','Petrov', 21,'MP11111'),
+    (2,'Petr','Ivanov', 22,'MP22222'),
+    (3,'Tema','Ivanov', 23,'MP22222'),
+    (4,'Svyt','Ivanov', 23,'MP22222'),
+    (5,'Jusys','Ivanov', 32,'MP33333');
+
+
+UPDATE "person" SET age = 23 WHERE name = 'Tema';
+
+DELETE FROM "person" WHERE age >= 23;
