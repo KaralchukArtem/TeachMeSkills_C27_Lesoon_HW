@@ -35,6 +35,12 @@
             <artifactId>jakarta.servlet.jsp.jstl</artifactId>
             <version>3.0.1</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>TeachMeSkills_C27_Lesoon_HW</finalName>
@@ -46,5 +52,5 @@
             </plugin>
         </plugins>
     </build>
-    
+
 </project>
