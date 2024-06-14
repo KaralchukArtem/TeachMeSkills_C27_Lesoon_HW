@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/change-login" method="get">
+<form action="${pageContext.request.contextPath}/change-login" method="post">
   <label>Enter ID of employee to show it333: </label>
   <br>
   <input type="number" name="id"/>

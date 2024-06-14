@@ -14,9 +14,6 @@
 <form action="${pageContext.request.contextPath}/create" method="post">
     <label>Create employee: </label>
     <br>
-    <label>ID</label>
-    <input type="number" name="id"/>
-    <br>
     <label>Name</label>
     <input type="text" name="name"/>
     <br>

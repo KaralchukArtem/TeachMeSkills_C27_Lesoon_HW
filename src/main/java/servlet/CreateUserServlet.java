@@ -20,12 +20,11 @@ public class CreateUserServlet extends HttpServlet {
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
         PreparedStatement preparedStatement;
         try (Connection connection = driverManager.getConnection()) {
-            preparedStatement = connection.prepareStatement("INSERT INTO person VALUES (?,?,?,?,?);");
-            preparedStatement.setInt(1, Integer.parseInt(req.getParameter("id")));
-            preparedStatement.setString(2, req.getParameter("name"));
-            preparedStatement.setString(3, req.getParameter("surname"));
-            preparedStatement.setInt(4, Integer.parseInt(req.getParameter("age")));
-            preparedStatement.setString(5, req.getParameter("passport_number"));
+            preparedStatement = connection.prepareStatement("INSERT INTO person VALUES (DEFAULT,?,?,?,?);");
+            preparedStatement.setString(1, req.getParameter("name"));
+            preparedStatement.setString(2, req.getParameter("surname"));
+            preparedStatement.setInt(3, Integer.parseInt(req.getParameter("age")));
+            preparedStatement.setString(4, req.getParameter("passport_number"));
             preparedStatement.executeUpdate();
             resp.sendRedirect("/");
         } catch (SQLException e) {

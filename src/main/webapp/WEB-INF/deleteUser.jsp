@@ -11,7 +11,7 @@
     <title>Title</title>
 </head>
 <body>
-<form action="${pageContext.request.contextPath}/delete" method="get">
+<form action="${pageContext.request.contextPath}/delete" method="post">
   <label>Enter delete id: </label>
   <br>
   <input type="number" name="id"/>

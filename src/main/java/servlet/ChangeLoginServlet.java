@@ -15,7 +15,7 @@ import java.sql.SQLException;
 @WebServlet("/change-login")
 public class ChangeLoginServlet extends HttpServlet {
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         System.out.println("ChangeLoginServlet");
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
         PreparedStatement preparedStatement;
