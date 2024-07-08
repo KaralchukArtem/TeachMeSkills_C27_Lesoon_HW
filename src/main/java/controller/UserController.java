@@ -16,8 +16,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Controller
-public class MappingController {
-    @RequestMapping("")
+public class UserController {
+    @RequestMapping
     public String start() {
         return "/start";
     }
@@ -44,7 +44,7 @@ public class MappingController {
     }
 
     @PostMapping("/delete")
-    public ModelAndView post(@RequestParam(value = "id", required = false) Integer id) {
+    public ModelAndView post(@RequestParam(value = "id") Integer id) {
         ModelAndView mav = new ModelAndView();
         System.out.println("delete");
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
@@ -62,7 +62,7 @@ public class MappingController {
     }
 
     @PostMapping("/change-login")
-    public ModelAndView post(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "id", required = false) Integer id) {
+    public ModelAndView post(@RequestParam(value = "name",required = false) String name, @RequestParam(value = "id",required = false) Integer id) {
         ModelAndView mav = new ModelAndView();
         System.out.println("change-login");
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
