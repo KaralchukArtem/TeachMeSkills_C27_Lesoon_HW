@@ -1,0 +1,28 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="subTask1" class="pack.SubTask">
+        <property name="message" value="Do work!"/>
+    </bean>
+
+    <bean id="subTask2" class="pack.SubTask">
+        <property name="message" value="Just do it!"/>
+    </bean>
+    <bean id="subTask3" class="pack.SubTask">
+        <property name="message" value="subTask3"/>
+    </bean>
+    <bean id="subTask4" class="pack.SubTask">
+        <property name="message" value="subTask4"/>
+    </bean>
+    <bean id="task1" class="pack.Task">
+        <property name="name" value="TASK1"/>
+        <property name="subTaskList">
+            <list>
+                <ref bean="subTask1"/>
+                <ref bean="subTask2"/>
+                <ref bean="subTask3"/>
+                <ref bean="subTask4"/>
+            </list>
+        </property>
+    </bean>
+</beans>
