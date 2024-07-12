@@ -12,11 +12,11 @@
 </head>
 <body>
 <div>
-  <p>Данные для пользователя с ID = ${id}</p>
-  <p>Employee_Id: ${id}</p>
-  <p>Name: ${name}</p>
-  <p>Surname: ${surname}</p>
-  <p>Age: ${age}</p>
+  <p>Данные для пользователя с ID = ${user.id}</p>
+  <p>Employee_Id: ${user.id}</p>
+  <p>Name: ${user.name}</p>
+  <p>Surname: ${user.surname}</p>
+  <p>Age: ${user.age}</p>
 </div>
 </body>
 </html>
