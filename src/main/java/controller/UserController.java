@@ -23,7 +23,7 @@ public class UserController {
     }
 
     @PostMapping(path = "/create", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ModelAndView post(UserModel model) {
+    public ModelAndView createUser(UserModel model) {
         ModelAndView mav = new ModelAndView();
         System.out.println("create");
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     @PostMapping("/delete")
-    public ModelAndView post(@RequestParam(value = "id") Integer id) {
+    public ModelAndView deleteUser(@RequestParam(value = "id") Integer id) {
         ModelAndView mav = new ModelAndView();
         System.out.println("delete");
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
@@ -62,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/change-login")
-    public ModelAndView post(@RequestParam(value = "name",required = false) String name, @RequestParam(value = "id",required = false) Integer id) {
+    public ModelAndView changeLoginUser(@RequestParam(value = "name",required = false) String name, @RequestParam(value = "id",required = false) Integer id) {
         ModelAndView mav = new ModelAndView();
         System.out.println("change-login");
         PostgresDriverManager driverManager = PostgresDriverManager.getInstance();
@@ -81,7 +81,7 @@ public class UserController {
     }
 
     @GetMapping("/get")
-    public ModelAndView get(@RequestParam(value = "id", required = false) Integer id) {
+    public ModelAndView getUser(@RequestParam(value = "id", required = false) Integer id) {
 
         ModelAndView mav = new ModelAndView();
         System.out.println("get");
