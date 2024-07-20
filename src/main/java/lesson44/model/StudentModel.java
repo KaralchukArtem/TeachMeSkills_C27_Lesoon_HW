@@ -1,4 +1,4 @@
-package lesson43.model;
+package lesson44.model;
 
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -34,4 +34,9 @@ public class StudentModel {
         this.age = age;
         this.id = id;
     }
+
+    public StudentModel() {
+
+    }
+
 }

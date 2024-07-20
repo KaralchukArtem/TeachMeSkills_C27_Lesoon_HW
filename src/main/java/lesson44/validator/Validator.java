@@ -1,6 +1,6 @@
-package lesson43.validator;
+package lesson44.validator;
 
-import lesson43.dao.StudentDao;
+import lesson44.dao.StudentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

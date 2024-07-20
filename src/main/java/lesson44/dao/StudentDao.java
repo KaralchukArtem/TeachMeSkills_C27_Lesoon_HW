@@ -1,7 +1,7 @@
-package lesson43.dao;
+package lesson44.dao;
 
-import lesson43.model.StudentModel;
-import lesson43.repository.StudentsRepository;
+import lesson44.model.StudentModel;
+import lesson44.repository.StudentsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
