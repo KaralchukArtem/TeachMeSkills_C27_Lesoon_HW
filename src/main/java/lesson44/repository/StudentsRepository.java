@@ -22,7 +22,7 @@ public class StudentsRepository {
 
     public StudentsRepository() {
         this.integerPersonModelMap = new HashMap<>();
-        System.out.println(getUsers());
+//        System.out.println(getUsers());
         this.integerPersonModelMap.put(++COUNTER, new StudentModel("Ivan", "Ivanov", "C27-onl", 25, COUNTER));
         this.integerPersonModelMap.put(++COUNTER, new StudentModel("Roman", "Romanov", "C27-onl", 26, COUNTER));
         this.integerPersonModelMap.put(++COUNTER, new StudentModel("Alexander", "Alexandrov", "C27-onl", 27, COUNTER));
