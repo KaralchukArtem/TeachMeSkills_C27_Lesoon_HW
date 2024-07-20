@@ -1,60 +1,61 @@
 package lesson43.controller;
 
-import lesson43.model.UserModel;
-import lesson43.service.UserService;
+import jakarta.validation.Valid;
+import lesson43.dao.StudentDao;
+import lesson43.model.StudentModel;
+import lesson43.validator.Validator;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
+@RequestMapping("/student")
 public class UserController {
     @Autowired
-    private UserService userService;
+    private StudentDao studentDao;
+    @Autowired
+    private Validator validator;
 
-    @GetMapping("/")
-    public String start() {
-        return "start";
+    @GetMapping("")
+    public ModelAndView start() {
+        ModelAndView modelAndView = new ModelAndView("start");
+        modelAndView.addObject("students",this.studentDao.getAllStudents());
+        return modelAndView;
+    }
+    @GetMapping("{id}")
+    public ModelAndView getStudent(@PathVariable int id){
+        ModelAndView modelAndView = new ModelAndView("student");
+        modelAndView.addObject("student",this.studentDao.getStudent(id));
+        return modelAndView;
     }
 
-    @PostMapping(path = "/create", consumes = {MediaType.APPLICATION_FORM_URLENCODED_VALUE})
-    public ModelAndView post(UserModel model) {
-        ModelAndView mav = new ModelAndView();
-        System.out.println("create");
-        if (userService.createUser(model)) {
-            mav.addObject("user", model);
-            mav.setViewName("infopage");
-        } else {
-            mav.setViewName("start");
-        }
-        return mav;
+    @RequestMapping(value = "/create",method = RequestMethod.GET)
+    public ModelAndView showCreateStudentPage(@ModelAttribute StudentModel student,BindingResult result) {
+        return new ModelAndView("createStudent","student",student);
+    }
+
+    @RequestMapping(value = "/create",method = RequestMethod.POST)
+    public ModelAndView createStudent(@Valid @ModelAttribute StudentModel student,BindingResult result) {
+        studentDao.addStudent(student);
+        return new ModelAndView("createdStudent", "student", student);
+    }
+
+    @GetMapping("/delete")
+    public ModelAndView showDeleteStudentPage() {
+        return new ModelAndView("deleteStudent");
     }
 
     @PostMapping("/delete")
-    public ModelAndView post(@RequestParam(value = "id") Integer id) {
-        ModelAndView mav = new ModelAndView();
-        userService.deleteUser(id);
-        mav.setViewName("start");
-        return mav;
-    }
+    public ModelAndView deleteStudent(@RequestParam int id) {
+        if (this.validator.isIdValid(id)) {
+            this.studentDao.deleteStudent(id);
 
-    @PostMapping("/change-login")
-    public ModelAndView post(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "id", required = false) Integer id) {
-        ModelAndView mav = new ModelAndView();
-        userService.changeLogin(name, id);
-        mav.setViewName("start");
-        return mav;
-    }
-
-    @GetMapping("/get")
-    public ModelAndView get(@RequestParam(value = "id", required = false) Integer id) {
-        ModelAndView mav = new ModelAndView();
-        UserModel requestUser = userService.getUser(id);
-        mav.addObject("user", requestUser);
-        mav.setViewName("infopage");
-        return mav;
+            return new ModelAndView("deletedStudent").addObject("id", id);
+        } else {
+            return new ModelAndView("deleteStudent").addObject("message", "id " + id + " is not found");
+        }
     }
 }
