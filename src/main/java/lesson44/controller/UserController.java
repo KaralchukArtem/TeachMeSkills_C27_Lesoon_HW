@@ -3,6 +3,7 @@ package lesson44.controller;
 import jakarta.validation.Valid;
 import lesson44.dao.StudentDao;
 import lesson44.model.StudentModel;
+import lesson44.repository.StudentsRepository;
 import lesson44.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +18,12 @@ public class UserController {
     private StudentDao studentDao;
     @Autowired
     private Validator validator;
-
+    @Autowired
+    private StudentsRepository repository;
     @GetMapping("")
     public ModelAndView start() {
+        StudentModel model = repository.getUsers();
+        System.out.println(model);
         ModelAndView modelAndView = new ModelAndView("start");
         modelAndView.addObject("students",this.studentDao.getAllStudents());
         return modelAndView;
