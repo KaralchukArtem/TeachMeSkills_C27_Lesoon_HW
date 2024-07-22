@@ -38,5 +38,4 @@ public class StudentModel {
     public StudentModel() {
 
     }
-
 }

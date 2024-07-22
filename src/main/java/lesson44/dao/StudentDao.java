@@ -13,23 +13,25 @@ import java.util.Map;
 public class StudentDao {
     @Autowired
     private StudentsRepository repository;
-
     public List<StudentModel> getAllStudents() {
         List<StudentModel> list = new ArrayList<>();
-        for (Map.Entry<Integer, StudentModel> entry : repository.getIntegerPersonModelMap().entrySet()){
+        for (Map.Entry<Integer, StudentModel> entry : repository.getUsers().entrySet()) {
             list.add(entry.getValue());
         }
         return list;
     }
     public StudentModel getStudent(int id) {
-        return repository.getIntegerPersonModelMap().get(id);
+        for (Map.Entry<Integer, StudentModel> entry : repository.getIntegerPersonModelMap().entrySet()) {
+            if (entry.getValue().getId() == id) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
-
     public void addStudent(StudentModel student) {
         this.repository.addStudent(student);
     }
-
     public void deleteStudent(int id) {
-        this.repository.getIntegerPersonModelMap().remove(id);
+        this.repository.deleteStudent(id);
     }
 }

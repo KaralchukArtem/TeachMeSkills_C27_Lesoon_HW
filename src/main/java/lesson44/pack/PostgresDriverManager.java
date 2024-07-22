@@ -1,6 +1,5 @@
 package lesson44.pack;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +15,6 @@ public class PostgresDriverManager {
     private String USERNAME;
     @Value("${spring.datasource.password}")
     private String PASSWORD;
-
     public Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
