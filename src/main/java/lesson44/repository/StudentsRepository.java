@@ -35,7 +35,7 @@ public class StudentsRepository {
         }
     }
 
-    public boolean deleteStudent(int id) {
+    public void deleteStudent(int id) {
         PreparedStatement preparedStatement;
         try (Connection connection = postgresDriverManager.getConnection()) {
             preparedStatement = connection.prepareStatement("DELETE FROM student WHERE id = ?;");
