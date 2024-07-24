@@ -1,5 +1,6 @@
 package lesson44.controller;
 
+import lesson44.dao.TransferCardDTO;
 import lesson44.model.ClientModel;
 import lesson44.repository.BankingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,5 +20,12 @@ public class ClientController {
     public ResponseEntity<ClientModel> getClientById(@PathVariable int id){
         ClientModel clientModel = bankingRepository.getClientById(id);
         return  new ResponseEntity<>(clientModel, HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/transfer", consumes = "application/json")
+    public ResponseEntity<TransferCardDTO> transfer(@RequestBody TransferCardDTO dto){
+        System.out.println("DTO - " + dto);
+        bankingRepository.transfer(dto);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
