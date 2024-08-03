@@ -1,76 +1,43 @@
 package lesson43.service;
 
 import lesson43.model.UserModel;
-import lesson43.pack.PostgresDriverManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.stereotype.Service;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 @Service
 public class UserService {
-    @Autowired
-    private PostgresDriverManager postgresDriverManager;
-
-    public boolean deleteUser(int id) {
-        PreparedStatement preparedStatement;
-        try (Connection connection = postgresDriverManager.getConnection()) {
-            preparedStatement = connection.prepareStatement("DELETE FROM person WHERE id = ?;");
-            preparedStatement.setInt(1, id);
-            return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void deleteUser(int id) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        UserModel userModel = session.getReference(UserModel.class, id);
+        Transaction t = session.beginTransaction();
+        session.remove(userModel);
+        t.commit();
     }
 
     public UserModel getUser(int id) {
-        PreparedStatement preparedStatement;
-        ResultSet preparedResultSet;
-        try (Connection connection = postgresDriverManager.getConnection()) {
-            preparedStatement = connection.prepareStatement("SELECT * FROM person WHERE ID = ?");
-            preparedStatement.setInt(1, id);
-            preparedResultSet = preparedStatement.executeQuery();
-            if (preparedResultSet.next()) {
-                UserModel user = new UserModel();
-                user.setId(preparedResultSet.getInt("id"));
-                user.setName(preparedResultSet.getString("name"));
-                user.setSurname(preparedResultSet.getString("surname"));
-                user.setAge(preparedResultSet.getInt("age"));
-                return user;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Ex!");
-        }
-        return null;
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        return session.getReference(UserModel.class, id);
     }
 
-    public boolean createUser(UserModel userModel) {
-        PreparedStatement preparedStatement;
-        try (Connection connection = postgresDriverManager.getConnection()) {
-            preparedStatement = connection.prepareStatement("INSERT INTO person VALUES (DEFAULT,?,?,?,?);");
-            preparedStatement.setString(1, userModel.getName());
-            preparedStatement.setString(2, userModel.getSurname());
-            preparedStatement.setInt(3, userModel.getAge());
-            preparedStatement.setString(4, userModel.getPassport_number());
-            return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public UserModel createUser(UserModel userModel) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        Transaction t = session.beginTransaction();
+        session.persist(userModel);
+        t.commit();
+        return userModel;
     }
 
-    public boolean changeLogin(String name, int id) {
-        PreparedStatement preparedStatement;
-        try (Connection connection = postgresDriverManager.getConnection()) {
-            preparedStatement = connection.prepareStatement("UPDATE person SET name = ? WHERE id = ?");
-            preparedStatement.setString(1, name);
-            preparedStatement.setInt(2, id);
-            return preparedStatement.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public void changeLogin(String name, int id) {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+        UserModel userModel = session.getReference(UserModel.class, id);
+        Transaction t = session.beginTransaction();
+        userModel.setName(name);
+        t.commit();
     }
 }

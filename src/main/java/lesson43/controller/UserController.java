@@ -3,7 +3,6 @@ package lesson43.controller;
 import lesson43.model.UserModel;
 import lesson43.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +24,8 @@ public class UserController {
     public ModelAndView createUser(UserModel model) {
         ModelAndView mav = new ModelAndView();
         System.out.println("create");
-        if (userService.createUser(model)) {
+        model = userService.createUser(model);
+        if (model != null) {
             mav.addObject("user", model);
             mav.setViewName("infopage");
         } else {
