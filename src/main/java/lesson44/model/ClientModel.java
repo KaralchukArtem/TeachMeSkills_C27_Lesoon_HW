@@ -10,8 +10,8 @@ import java.util.List;
 @Setter
 @Schema(description = "customer client entity")
 public class ClientModel  {
-    int id;
-    String name;
+    private int id;
+    private String name;
     @Schema(description = "customer cards object")
-    List<CardModel> cards;
+    private List<CardModel> cards;
 }

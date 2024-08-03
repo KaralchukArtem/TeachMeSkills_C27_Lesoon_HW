@@ -4,6 +4,7 @@ import lesson44.dao.TransferCardDTO;
 import lesson44.model.CardModel;
 import lesson44.model.ClientModel;
 import lesson44.pack.PostgresDriverManager;
+import lesson44.validator.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -19,6 +20,8 @@ import java.util.List;
 public class BankingRepository {
     @Autowired
     public PostgresDriverManager postgresDriverManager;
+    @Autowired
+    public Validator validator;
 
     public ClientModel getClientById(int id) {
         String sql = """
@@ -45,7 +48,7 @@ public class BankingRepository {
                 card.setCardBalance(resultSet.getInt("balance"));
                 cards.add(card);
             }
-            if (clientModel != null) {
+            if (validator.idClientModelValid(clientModel)) {
                 clientModel.setCards(cards);
                 return clientModel;
             }
@@ -56,15 +59,15 @@ public class BankingRepository {
         return null;
     }
 
-    public void transfer(TransferCardDTO cardDTO){
+    public void transfer(TransferCardDTO cardDTO) {
         try (Connection connection = postgresDriverManager.getConnection()) {
             PreparedStatement preparedStatement = connection.prepareStatement("SELECT balance FROM card WHERE client_id = ? AND number = ?");
             preparedStatement.setInt(1, cardDTO.getClientId());
-            preparedStatement.setString(2,cardDTO.getCardFrom());
+            preparedStatement.setString(2, cardDTO.getCardFrom());
 
             ResultSet resultSet = preparedStatement.executeQuery();
 
-            if (!resultSet.next()){
+            if (!resultSet.next()) {
                 throw new SQLException("Карта не найдена");
             }
 
@@ -72,7 +75,7 @@ public class BankingRepository {
             BigDecimal balanceFrom = resultSet.getBigDecimal("balance");
             BigDecimal transferAmount = cardDTO.getAmount();
 
-            if(balanceFrom.compareTo(transferAmount) < 0) {
+            if (balanceFrom.compareTo(transferAmount) < 0) {
                 throw new SQLException("На карте не достаточно средств");
             }
 
@@ -87,7 +90,7 @@ public class BankingRepository {
             String sqlCheckCardTo = "SELECT balance FROM card WHERE client_id = ? AND number = ?";
             PreparedStatement preparedStatementCheckCardTo = connection.prepareStatement(sqlCheckCardTo);
             preparedStatementCheckCardTo.setInt(1, cardDTO.getClientId());
-            preparedStatementCheckCardTo.setString(2,cardDTO.getCardTo());
+            preparedStatementCheckCardTo.setString(2, cardDTO.getCardTo());
             ResultSet resultSetTo = preparedStatementCheckCardTo.executeQuery();
 
             if (!resultSetTo.next()) {

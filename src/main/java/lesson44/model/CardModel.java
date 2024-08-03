@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Schema(description = "customer card entity")
 public class CardModel {
-    int id;
-    String cardNumber;
-    int cardBalance;
+    private int id;
+    private String cardNumber;
+    private int cardBalance;
 }
