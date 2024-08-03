@@ -27,14 +27,6 @@ public class StudentModel {
     private int age;
     private int id;
 
-    public StudentModel(String name, String surname, String group, int age, int id) {
-        this.name = name;
-        this.surname = surname;
-        this.group = group;
-        this.age = age;
-        this.id = id;
-    }
-
     public StudentModel() {
 
     }

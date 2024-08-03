@@ -4,11 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.boot.web.servlet.error.ErrorController;
 
 
 @Controller
-public class ErCont implements ErrorController{
+public class ErrorController implements org.springframework.boot.web.servlet.error.ErrorController {
     @RequestMapping("/error")
     @ResponseBody
     String error(HttpServletRequest request){

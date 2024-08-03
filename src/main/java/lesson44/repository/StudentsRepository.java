@@ -40,7 +40,7 @@ public class StudentsRepository {
         try (Connection connection = postgresDriverManager.getConnection()) {
             preparedStatement = connection.prepareStatement("DELETE FROM student WHERE id = ?;");
             preparedStatement.setInt(1, id);
-            return preparedStatement.executeUpdate() > 0;
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException();
         }
@@ -53,15 +53,15 @@ public class StudentsRepository {
         try (Connection connection = postgresDriverManager.getConnection()) {
             preparedStatement = connection.prepareStatement("SELECT * FROM student");
             preparedResultSet = preparedStatement.executeQuery();
+            StudentModel studentModel;
             while (preparedResultSet.next()) {
-                user.put(++COUNTER, new StudentModel(
-                                preparedResultSet.getString("name"),
-                                preparedResultSet.getString("surname"),
-                                preparedResultSet.getString("class"),
-                                preparedResultSet.getInt("age"),
-                                preparedResultSet.getInt("id")
-                        )
-                );
+                studentModel = new StudentModel();
+                studentModel.setName(preparedResultSet.getString("name"));
+                studentModel.setSurname(preparedResultSet.getString("surname"));
+                studentModel.setGroup(preparedResultSet.getString("class"));
+                studentModel.setAge(preparedResultSet.getInt("age"));
+                studentModel.setId(preparedResultSet.getInt("id"));
+                user.put(++COUNTER, studentModel);
             }
             this.integerPersonModelMap = user;
             return user;

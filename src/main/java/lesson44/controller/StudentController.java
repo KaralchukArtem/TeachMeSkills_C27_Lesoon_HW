@@ -12,32 +12,32 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping("/student")
-public class UserController {
+public class StudentController {
     @Autowired
     private StudentDao studentDao;
     @Autowired
     private Validator validator;
 
-    @GetMapping("")
+    @GetMapping
     public ModelAndView start() {
         ModelAndView modelAndView = new ModelAndView("start");
-        modelAndView.addObject("students", this.studentDao.getAllStudents());
+        modelAndView.addObject("students", studentDao.getAllStudents());
         return modelAndView;
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ModelAndView getStudent(@PathVariable int id) {
         ModelAndView modelAndView = new ModelAndView("student");
-        modelAndView.addObject("student", this.studentDao.getStudent(id));
+        modelAndView.addObject("student", studentDao.getStudent(id));
         return modelAndView;
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.GET)
+    @GetMapping("/create")
     public ModelAndView showCreateStudentPage(@ModelAttribute StudentModel student, BindingResult result) {
         return new ModelAndView("createStudent", "student", student);
     }
 
-    @RequestMapping(value = "/create", method = RequestMethod.POST)
+    @PostMapping("/create")
     public ModelAndView createStudent(@Valid @ModelAttribute StudentModel student, BindingResult result) {
         studentDao.addStudent(student);
         return new ModelAndView("createdStudent", "student", student);
