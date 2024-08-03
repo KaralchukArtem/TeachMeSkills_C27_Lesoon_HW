@@ -14,7 +14,7 @@ import java.sql.SQLException;
 @RequestMapping("/client")
 public class ClientController {
     @Autowired
-    BankingRepository bankingRepository;
+    private BankingRepository bankingRepository;
 
     @GetMapping("/{id}")
     public ResponseEntity<ClientModel> getClientById(@PathVariable int id){

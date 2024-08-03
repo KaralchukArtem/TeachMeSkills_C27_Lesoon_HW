@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Setter
 public class ClientModel {
-    int id;
-    String name;
-    List<CardModel> cards;
+    private int id;
+    private String name;
+    private List<CardModel> cards;
 }
