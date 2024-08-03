@@ -1,5 +1,8 @@
 package lesson44.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
@@ -13,14 +16,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+
 @RestController
+@Tag(name = "File Management System")
 @RequestMapping("/files")
 public class FileController {
 
     private String directory = "C:\\TMSCources";
 
     @PostMapping(value = "/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile multipartFile){
+    @Operation( summary= "Upload a file", description = "Provide a file to be uploaded to the server")
+    public ResponseEntity<String> uploadFile(@Parameter(name = "File to be uploaded") @RequestParam("file") MultipartFile multipartFile){
         try{
             Files.copy(multipartFile.getInputStream(), Paths.get(directory).resolve(multipartFile.getOriginalFilename()));
             return ResponseEntity.ok("Upload: " + multipartFile.getOriginalFilename());
@@ -31,7 +37,8 @@ public class FileController {
     }
 
     @GetMapping(value = "/download/{filename}")
-    public  ResponseEntity<Resource> downloadFile(@PathVariable("filename") String filename){
+    @Operation( summary= "Download a file")
+    public  ResponseEntity<Resource> downloadFile(@Parameter(name = "Name of the file to be downloaded") @PathVariable("filename") String filename){
         Path file = Paths.get(directory).resolve(filename);
         Resource resource = null;
         try{
