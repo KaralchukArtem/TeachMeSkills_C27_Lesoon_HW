@@ -7,7 +7,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "grooup")
 public class GrooupModel {
@@ -19,4 +18,10 @@ public class GrooupModel {
     private String title;
     @Column(name = "room")
     private int room;
+
+    @Override
+    public String toString() {
+        return  "title='" + title + '\'' +
+                ", room=" + room;
+    }
 }

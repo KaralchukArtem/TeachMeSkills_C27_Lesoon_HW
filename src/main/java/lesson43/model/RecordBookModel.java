@@ -7,7 +7,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "record_book")
 public class RecordBookModel {
@@ -17,4 +16,9 @@ public class RecordBookModel {
     private int id;
     @Column(name = "rating")
     private int rating;
+
+    @Override
+    public String toString() {
+        return ",rating=" + rating ;
+    }
 }

@@ -7,7 +7,6 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
 @Entity
 @Table(name = "student")
 public class StudentModel {
@@ -25,4 +24,15 @@ public class StudentModel {
     @OneToOne
     @JoinColumn(name = "record_book_id")
     private RecordBookModel recordBookModel;
+
+    @Override
+    public String toString() {
+        return "\nStudentModel{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", age=" + age +
+                ", " + grooupModel +
+                ", " + recordBookModel +
+                '}';
+    }
 }
