@@ -7,6 +7,7 @@ import lesson43.model.GrooupModel;
 import lesson43.model.StudentModel;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -15,26 +16,21 @@ import java.util.Map;
 
 @Service
 public class UserService {
-    public static void main(String[] args) {
-        // get
+
+    public List<StudentModel> getGroups(String title) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<StudentModel> criteriaQuery = criteriaBuilder.createQuery(StudentModel.class);
         Root<StudentModel> root = criteriaQuery.from(StudentModel.class);
-        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("grooupModel").get("title"), "tm-26"));
+        criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("grooupModel").get("title"), title));
 
         List<StudentModel> grooups = session.createQuery(criteriaQuery).getResultList();
-        for (StudentModel studentModel : grooups) {
-            System.out.println(studentModel.getName());
-        }
-        //
-//        sort();
-        sort1();
+        return grooups;
     }
 
-    private static void sort() {
+    public List<StudentModel> getAllStudentsDesc() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
 
@@ -47,10 +43,10 @@ public class UserService {
         for (StudentModel studentModel : student) {
             System.out.println(studentModel);
         }
+        return student;
     }
 
-    private static void sort1()
-    {
+    public Map<String, List<StudentModel>> getTopStudents() {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
         Session session = sessionFactory.openSession();
 
@@ -62,8 +58,7 @@ public class UserService {
         List<String> groupTitle = session.createQuery(queryTitleGroup).getResultList();
         Map<String, List<StudentModel>> topStudentsByGroup = new HashMap<>();
 
-        for (String title : groupTitle)
-        {
+        for (String title : groupTitle) {
             CriteriaQuery<StudentModel> studentModelCriteriaQuery = cb.createQuery(StudentModel.class);
             Root<StudentModel> rootStudent = studentModelCriteriaQuery.from(StudentModel.class);
             studentModelCriteriaQuery.where(cb.equal(rootStudent.get("grooupModel").get("title"), title));
@@ -74,45 +69,47 @@ public class UserService {
                     .getResultList();
             topStudentsByGroup.put(title, topStudent);
         }
+        return topStudentsByGroup;
+    }
+
+    public Map<String, List<StudentModel>> getAVGStudentsByRating() {
+        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
+        Session session = sessionFactory.openSession();
+
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<String> queryTitleGroup = cb.createQuery(String.class);
+        Root<GrooupModel> groupRoot = queryTitleGroup.from(GrooupModel.class);
+        queryTitleGroup.select(groupRoot.get("title")).distinct(true);
+
+        List<String> groupTitle = session.createQuery(queryTitleGroup).getResultList();
+        Map<String, List<StudentModel>> topStudentsByGroup = new HashMap<>();
+
+        for (String title : groupTitle) {
+            CriteriaQuery<Double> avarageCriteriaQuery = cb.createQuery(Double.class);
+            Root<StudentModel> recordBookModelRoot = avarageCriteriaQuery.from(StudentModel.class);
+            avarageCriteriaQuery.where(cb.equal(recordBookModelRoot.get("grooupModel").get("title"), title));
+            avarageCriteriaQuery.select(cb.avg(recordBookModelRoot.get("recordBookModel").get("rating")));
+            Query<Double> doubleQuery = session.createQuery(avarageCriteriaQuery);
+            Double avg = doubleQuery.getSingleResult();
+            System.out.println(title + " - AVG - " + avg);
+
+            CriteriaQuery<StudentModel> studentModelCriteriaQuery = cb.createQuery(StudentModel.class);
+            Root<StudentModel> rootStudent = studentModelCriteriaQuery.from(StudentModel.class);
+            studentModelCriteriaQuery.select(rootStudent).where(
+                    cb.and(
+                            cb.equal(rootStudent.get("grooupModel").get("title"), title),
+                            cb.gt(rootStudent.get("recordBookModel").get("rating"), avg)
+                    ));
+            studentModelCriteriaQuery.orderBy(cb.desc(rootStudent.get("recordBookModel").get("rating")));
+
+            List<StudentModel> topStudent = session.createQuery(studentModelCriteriaQuery)
+                    .getResultList();
+            topStudentsByGroup.put(title, topStudent);
+        }
 
         for (Map.Entry<String, List<StudentModel>> entry : topStudentsByGroup.entrySet()) {
             System.out.println(entry);
         }
+        return topStudentsByGroup;
     }
-
-    private static void sort2(){
-
-    }
-//    public void deleteUser(int id) {
-//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-//        Session session = sessionFactory.openSession();
-//        UserModel userModel = session.getReference(UserModel.class, id);
-//        Transaction t = session.beginTransaction();
-//        session.remove(userModel);
-//        t.commit();
-//    }
-//
-//    public UserModel getUser(int id) {
-//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-//        Session session = sessionFactory.openSession();
-//        return session.getReference(UserModel.class, id);
-//    }
-//
-//    public UserModel createUser(UserModel userModel) {
-//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-//        Session session = sessionFactory.openSession();
-//        Transaction t = session.beginTransaction();
-//        session.persist(userModel);
-//        t.commit();
-//        return userModel;
-//    }
-//
-//    public void changeLogin(String name, int id) {
-//        SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-//        Session session = sessionFactory.openSession();
-//        UserModel userModel = session.getReference(UserModel.class, id);
-//        Transaction t = session.beginTransaction();
-//        userModel.setName(name);
-//        t.commit();
-//    }
 }

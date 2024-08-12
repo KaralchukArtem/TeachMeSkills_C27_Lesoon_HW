@@ -15,7 +15,7 @@ public class RecordBookModel {
     @Column(name = "id")
     private int id;
     @Column(name = "rating")
-    private int rating;
+    private double rating;
 
     @Override
     public String toString() {

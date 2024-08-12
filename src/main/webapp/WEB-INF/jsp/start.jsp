@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: BlackOuT
-  Date: 10.06.2024
-  Time: 14:55
+  Date: 12.08.2024
+  Time: 16:31
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -11,9 +11,13 @@
     <title>Title</title>
 </head>
 <body>
-<jsp:include page="getUser.jsp" />
-<jsp:include page="createUser.jsp" />
-<jsp:include page="changeUser.jsp" />
-<jsp:include page="deleteUser.jsp" />
+<jsp:include page="getGroupByTitle.jsp" />
+<jsp:include page="getAllStudentsDesc.jsp"/>
+<form action="${pageContext.request.contextPath}/top" method="get">
+    <button type="submit">Show top students </button>
+</form>
+<form action="${pageContext.request.contextPath}/avg" method="get">
+    <button type="submit">Show avg students </button>
+</form>
 </body>
 </html>
