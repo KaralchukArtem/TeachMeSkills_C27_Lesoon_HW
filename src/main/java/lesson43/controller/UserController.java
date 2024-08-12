@@ -1,6 +1,6 @@
 package lesson43.controller;
 
-import lesson43.service.UserService;
+import lesson43.dao.StudentDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class UserController {
     @Autowired
-    private UserService userService;
+    private StudentDao studentDao;
     @GetMapping("/")
     public String start() {
         return "start";
@@ -19,28 +19,28 @@ public class UserController {
     @GetMapping("/get")
     public ModelAndView getGroup(@RequestParam(value = "title",required = false) String title) {
         ModelAndView mav = new ModelAndView();
-        mav.addObject("group", userService.getGroups(title));
+        mav.addObject("group", studentDao.getGroups(title));
         mav.setViewName("getGroups");
         return mav;
     }
     @GetMapping("/desc")
     public ModelAndView getStudentsDesc() {
         ModelAndView mav = new ModelAndView();
-        mav.addObject("group", userService.getAllStudentsDesc());
+        mav.addObject("group", studentDao.getAllStudentsDesc());
         mav.setViewName("getGroups");
         return mav;
     }
     @GetMapping("/top")
     public ModelAndView getTopStudents() {
         ModelAndView mav = new ModelAndView();
-        mav.addObject("group", userService.getTopStudents());
+        mav.addObject("group", studentDao.getTopStudents());
         mav.setViewName("getTopStudents");
         return mav;
     }
     @GetMapping("/avg")
     public ModelAndView getAVGStudents() {
         ModelAndView mav = new ModelAndView();
-        mav.addObject("group", userService.getAVGStudentsByRating());
+        mav.addObject("group", studentDao.getAVGStudentsByRating());
         mav.setViewName("getTopStudents");
         return mav;
     }

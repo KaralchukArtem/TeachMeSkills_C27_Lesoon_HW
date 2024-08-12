@@ -1,10 +1,11 @@
-package lesson43.service;
+package lesson43.dao;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import lesson43.model.GrooupModel;
 import lesson43.model.StudentModel;
+import lesson43.service.HibernateUtil;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -15,7 +16,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class StudentDao {
 
     public List<StudentModel> getGroups(String title) {
         SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
@@ -27,6 +28,7 @@ public class UserService {
         criteriaQuery.select(root).where(criteriaBuilder.equal(root.get("grooupModel").get("title"), title));
 
         List<StudentModel> grooups = session.createQuery(criteriaQuery).getResultList();
+        session.close();
         return grooups;
     }
 
@@ -40,9 +42,7 @@ public class UserService {
         criteriaQuery.orderBy(criteriaBuilder.desc(root.get("recordBookModel").get("rating")));
 
         List<StudentModel> student = session.createQuery(criteriaQuery).getResultList();
-        for (StudentModel studentModel : student) {
-            System.out.println(studentModel);
-        }
+        session.close();
         return student;
     }
 
@@ -69,6 +69,7 @@ public class UserService {
                     .getResultList();
             topStudentsByGroup.put(title, topStudent);
         }
+        session.close();
         return topStudentsByGroup;
     }
 
@@ -91,7 +92,6 @@ public class UserService {
             avarageCriteriaQuery.select(cb.avg(recordBookModelRoot.get("recordBookModel").get("rating")));
             Query<Double> doubleQuery = session.createQuery(avarageCriteriaQuery);
             Double avg = doubleQuery.getSingleResult();
-            System.out.println(title + " - AVG - " + avg);
 
             CriteriaQuery<StudentModel> studentModelCriteriaQuery = cb.createQuery(StudentModel.class);
             Root<StudentModel> rootStudent = studentModelCriteriaQuery.from(StudentModel.class);
@@ -106,10 +106,7 @@ public class UserService {
                     .getResultList();
             topStudentsByGroup.put(title, topStudent);
         }
-
-        for (Map.Entry<String, List<StudentModel>> entry : topStudentsByGroup.entrySet()) {
-            System.out.println(entry);
-        }
+        session.close();
         return topStudentsByGroup;
     }
 }
